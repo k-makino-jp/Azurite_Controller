@@ -50,9 +50,9 @@
    $ ./mkcert 127.0.0.1
      => 127.0.0.1.pem and 127.0.0.1-key.pem created.
 
-   $ mkdir azurite
+   $ mv 127.0.0.1.pem     ../azurite-controller/azurite/127.0.0.1.pem
 
-   $ mv 127.0.0.1.pem azurite/127.0.0.1.pem && mv 127.0.0.1-key.pem azurite/127.0.0.1-key.pem
+   $ mv 127.0.0.1-key.pem ../azurite-controller/azurite/127.0.0.1-key.pem
    ```
 
 #### Docker Compose 実行
