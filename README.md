@@ -23,13 +23,13 @@
 ```
 .
 ├── azurite-controller/
+│    ├── azurite/
+│    │    ├── 127.0.0.1-key.pem
+│    │    └── 127.0.0.1.pem
 │    ├── queue/
 │    ├── docker-compose.yml
 │    └── queue_test.go
 └── mkcert/
-    └── azurite/
-        ├── 127.0.0.1-key.pem
-        └── 127.0.0.1.pem
 ```
 
 #### 本リポジトリのクローン
