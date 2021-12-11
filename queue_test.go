@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/url"
 	"testing"
 	"time"
@@ -63,6 +64,36 @@ func (q queue) Clear() error {
 func (q queue) Delete() error {
 	_, err := q.url.Delete(q.ctx)
 	return err
+}
+
+// TODO
+func (q queue) CreateSas() {
+	credential, err := azqueue.NewSharedKeyCredential(q.accountName, q.accountKey)
+	if err != nil {
+		log.Fatal(err)
+	}
+	queueName := "queue-name"
+
+	// Set the desired SAS signature values and sign them with the shared key credentials to get the SAS query parameters.
+	sasQueryParams := azqueue.QueueSASSignatureValues{
+		Protocol:   azqueue.SASProtocolHTTPS,       // Users MUST use HTTPS (not HTTP)
+		ExpiryTime: time.Now().Add(48 * time.Hour), // 48-hours before expiration
+		QueueName:  queueName,
+		Permissions: azqueue.QueueSASPermissions{
+			Add:     true,
+			Read:    true,
+			Process: true,
+		}.String(),
+	}.NewSASQueryParameters(credential)
+
+	qp := sasQueryParams.Encode()
+	urlToSendToSomeone := fmt.Sprintf("https://127.0.0.1:10001/%s/%s?%s", q.accountName, queueName, qp)
+
+	u, _ := url.Parse(urlToSendToSomeone)
+	queueURL := azqueue.NewQueueURL(*u, azqueue.NewPipeline(azqueue.NewAnonymousCredential(), azqueue.PipelineOptions{}))
+	queueURLParts := azqueue.NewQueueURLParts(queueURL.URL())
+	fmt.Printf("SAS Protocol=%v\n", queueURLParts.SAS.Protocol())
+	fmt.Printf("SAS Permissions=%v\n", queueURLParts.SAS.Permissions())
 }
 
 func Test_AzureQueue(t *testing.T) {
