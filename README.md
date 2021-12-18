@@ -38,6 +38,7 @@
 
 1. [mkcert](https://github.com/FiloSottile/mkcert) を利用した以下のスクリプトを実行し、自己署名証明書を作成する。
    ```sh
+   $ cd azurite-controller/certs
    $ chmod 755 certs/create.sh
    $ ./cert/create.sh
    ```
@@ -46,6 +47,7 @@
 
 1. 以下のコマンドを実行し、Azurite コンテナを起動する。
    ```sh
+   $ cd azurite-controller
    $ docker-compose up -d
    ```
 
@@ -53,6 +55,7 @@
 
 1. 以下のコマンドを実行し、テストを実行する。
    ```sh
+   $ cd azurite-controller
    $ go test -v azuritectl_test.go
    ```
 
