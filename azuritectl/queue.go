@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/url"
 	"testing"
 	"time"
@@ -175,32 +174,23 @@ func (q queue) Delete(t *testing.T) error {
 	return errors.New(errMessage)
 }
 
-// TODO
-func (q queue) CreateSas() {
+// CreateSasQueryParameters creates sas query parameters.
+func (q queue) CreateSasQueryParameters(t *testing.T) (azqueue.SASQueryParameters, error) {
 	credential, err := azqueue.NewSharedKeyCredential(azuriteDefaultAccountName, azuriteDefaultAccountKey)
 	if err != nil {
-		log.Fatal(err)
+		t.Errorf("Failed to azqueue.NewSharedKeyCredential = %v", err)
+		return azqueue.SASQueryParameters{}, err
 	}
-	queueName := "queue-name"
 
-	// Set the desired SAS signature values and sign them with the shared key credentials to get the SAS query parameters.
 	sasQueryParams := azqueue.QueueSASSignatureValues{
-		Protocol:   azqueue.SASProtocolHTTPS,       // Users MUST use HTTPS (not HTTP)
-		ExpiryTime: time.Now().Add(48 * time.Hour), // 48-hours before expiration
-		QueueName:  queueName,
+		Protocol:   azqueue.SASProtocolHTTPS,
+		ExpiryTime: time.Now().Add(1 * time.Hour),
+		QueueName:  q.name,
 		Permissions: azqueue.QueueSASPermissions{
 			Add:     true,
 			Read:    true,
 			Process: true,
 		}.String(),
 	}.NewSASQueryParameters(credential)
-
-	qp := sasQueryParams.Encode()
-	urlToSendToSomeone := fmt.Sprintf("https://127.0.0.1:10001/%s/%s?%s", azuriteDefaultAccountName, queueName, qp)
-
-	u, _ := url.Parse(urlToSendToSomeone)
-	queueURL := azqueue.NewQueueURL(*u, azqueue.NewPipeline(azqueue.NewAnonymousCredential(), azqueue.PipelineOptions{}))
-	queueURLParts := azqueue.NewQueueURLParts(queueURL.URL())
-	fmt.Printf("SAS Protocol=%v\n", queueURLParts.SAS.Protocol())
-	fmt.Printf("SAS Permissions=%v\n", queueURLParts.SAS.Permissions())
+	return sasQueryParams, nil
 }
