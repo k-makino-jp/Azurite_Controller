@@ -68,6 +68,6 @@
 1. 以下のコマンドを実行する。
 
    ```sh
-   $ go test -v queue_test.go
+   $ go test -v azuritectl_test.go
    ```
 
