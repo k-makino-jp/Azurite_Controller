@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"io"
+	"io/ioutil"
 	"log"
 	"net/url"
 	"testing"
@@ -67,10 +67,10 @@ func (q *queue) Create(t *testing.T, port int) error {
 		return nil
 	}
 
-	respBytes, err := io.ReadAll(queueCreateResponse.Response().Body)
+	respBytes, err := ioutil.ReadAll(queueCreateResponse.Response().Body)
 	defer queueCreateResponse.Response().Body.Close()
 	if err != nil {
-		t.Errorf("Failed to io.ReadAll = %v", err)
+		t.Errorf("Failed to ioutil.ReadAll = %v", err)
 		return err
 	}
 
@@ -96,10 +96,10 @@ func (q queue) Enqueue(t *testing.T, messageText string) error {
 		return nil
 	}
 
-	respBytes, err := io.ReadAll(enqueueMessageResponse.Response().Body)
+	respBytes, err := ioutil.ReadAll(enqueueMessageResponse.Response().Body)
 	defer enqueueMessageResponse.Response().Body.Close()
 	if err != nil {
-		t.Errorf("Failed to io.ReadAll = %v", err)
+		t.Errorf("Failed to ioutil.ReadAll = %v", err)
 		return err
 	}
 
@@ -122,10 +122,10 @@ func (q queue) Dequeue(t *testing.T) (*azqueue.DequeuedMessagesResponse, error) 
 		return dequeuedMessagesResponse, nil
 	}
 
-	respBytes, err := io.ReadAll(dequeuedMessagesResponse.Response().Body)
+	respBytes, err := ioutil.ReadAll(dequeuedMessagesResponse.Response().Body)
 	defer dequeuedMessagesResponse.Response().Body.Close()
 	if err != nil {
-		t.Errorf("Failed to io.ReadAll = %v", err)
+		t.Errorf("Failed to ioutil.ReadAll = %v", err)
 		return &azqueue.DequeuedMessagesResponse{}, err
 	}
 
@@ -148,10 +148,10 @@ func (q queue) Clear(t *testing.T) error {
 		return nil
 	}
 
-	respBytes, err := io.ReadAll(messagesClearResponse.Response().Body)
+	respBytes, err := ioutil.ReadAll(messagesClearResponse.Response().Body)
 	defer messagesClearResponse.Response().Body.Close()
 	if err != nil {
-		t.Errorf("Failed to io.ReadAll = %v", err)
+		t.Errorf("Failed to ioutil.ReadAll = %v", err)
 		return err
 	}
 
@@ -173,10 +173,10 @@ func (q queue) Delete(t *testing.T) error {
 		return nil
 	}
 
-	respBytes, err := io.ReadAll(queueDeleteResponse.Response().Body)
+	respBytes, err := ioutil.ReadAll(queueDeleteResponse.Response().Body)
 	defer queueDeleteResponse.Response().Body.Close()
 	if err != nil {
-		t.Errorf("Failed to io.ReadAll = %v", err)
+		t.Errorf("Failed to ioutil.ReadAll = %v", err)
 		return err
 	}
 
