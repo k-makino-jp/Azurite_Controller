@@ -30,7 +30,7 @@ func Test_AzureQueue(t *testing.T) {
 		if err != nil {
 			return
 		}
-		assert.Equal(t, messageText, dequeue.Message(0))
+		assert.Equal(t, messageText, dequeue.Message(0).Text)
 
 		if err := azureQueue.Clear(t); err != nil {
 			return

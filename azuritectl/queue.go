@@ -10,7 +10,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Azure/azure-pipeline-go/pipeline"
 	"github.com/Azure/azure-storage-queue-go/azqueue"
 )
 
@@ -35,18 +34,7 @@ func (q *queue) Create(t *testing.T, port int) error {
 		return err
 	}
 
-	azqueuePipeline := azqueue.NewPipeline(credential, azqueue.PipelineOptions{
-		Log: pipeline.LogOptions{},
-		Retry: azqueue.RetryOptions{
-			Policy:        0, //  use an exponential back-off retry policy
-			MaxTries:      5,
-			TryTimeout:    10,
-			RetryDelay:    0,
-			MaxRetryDelay: 0,
-		},
-		RequestLog: azqueue.RequestLogOptions{},
-		Telemetry:  azqueue.TelemetryOptions{},
-	})
+	azqueuePipeline := azqueue.NewPipeline(credential, azqueue.PipelineOptions{})
 
 	u, err := url.Parse(fmt.Sprintf("https://127.0.0.1:%d/%s", port, azuriteDefaultAccountName))
 	if err != nil {
