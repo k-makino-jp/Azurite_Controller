@@ -22,14 +22,12 @@
 
 ```
 .
-├── azurite-controller/
-│    ├── azurite/
-│    │    ├── 127.0.0.1-key.pem
-│    │    └── 127.0.0.1.pem
-│    ├── queue/
-│    ├── docker-compose.yml
-│    └── queue_test.go
-└── mkcert/
+└── azurite-controller/
+     ├── certs/
+     │    ├── 127.0.0.1-key.pem
+     │    └── 127.0.0.1.pem
+     ├── docker-compose.yml
+     └── queue_test.go
 ```
 
 #### 本リポジトリのクローン
@@ -38,35 +36,22 @@
 
 #### HTTPS 設定
 
-1. [mkcert installation](https://github.com/FiloSottile/mkcert#installation) を参考に以下の手順を実行する。
-
+1. [mkcert](https://github.com/FiloSottile/mkcert) を利用した以下のスクリプトを実行し、自己署名証明書を作成する。
    ```sh
-   $ git clone https://github.com/FiloSottile/mkcert && cd mkcert
-
-   $ go build -ldflags "-X main.Version=$(git describe --tags)"
-
-   $ ./mkcert -install
-
-   $ ./mkcert 127.0.0.1
-     => 127.0.0.1.pem and 127.0.0.1-key.pem created.
-
-   $ mv 127.0.0.1.pem     ../azurite-controller/azurite/127.0.0.1.pem
-
-   $ mv 127.0.0.1-key.pem ../azurite-controller/azurite/127.0.0.1-key.pem
+   $ chmod 755 certs/create.sh
+   $ ./cert/create.sh
    ```
 
 #### Docker Compose 実行
 
-1. 以下のコマンドを実行する。
-
+1. 以下のコマンドを実行し、Azurite コンテナを起動する。
    ```sh
    $ docker-compose up -d
    ```
 
 #### テストコード実行
 
-1. 以下のコマンドを実行する。
-
+1. 以下のコマンドを実行し、テストを実行する。
    ```sh
    $ go test -v azuritectl_test.go
    ```
